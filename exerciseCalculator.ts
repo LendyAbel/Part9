@@ -29,4 +29,7 @@ const calculateExercises = (hoursPerDay: number[], target: number): Result => {
   }
 }
 
-console.log(calculateExercises([3, 2, 2, 4.5, 0, 3, 1],2))
+const target = Number(process.argv[2])
+const hoursPerDay = process.argv.slice(3).map(Number)
+
+console.log(calculateExercises(hoursPerDay, target))

@@ -11,8 +11,11 @@ const getBMICategory = (bmi: number): string => {
 
 const calculateBmi = (height: number, weight: number): string => {
   const heihtInMeters = height / 100
-  const bmi = (weight / (heihtInMeters ^ 2))
+  const bmi = weight / (heihtInMeters ^ 2)
   return getBMICategory(bmi)
 }
 
-console.log(calculateBmi(180, 74))
+const height = Number(process.argv[2])
+const weight = Number(process.argv[3])
+
+console.log(calculateBmi(height, weight))
