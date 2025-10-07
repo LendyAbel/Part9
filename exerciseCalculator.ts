@@ -1,3 +1,5 @@
+import { parseArgumentsExercises } from './helper'
+
 interface Result {
   periodLength: number
   trainingDays: number
@@ -29,4 +31,14 @@ const calculateExercises = (hoursPerDay: number[], target: number): Result => {
   }
 }
 
-console.log(calculateExercises([3, 2, 2, 4.5, 0, 3, 1],2))
+
+try {
+  const { target, hoursPerDay } = parseArgumentsExercises(process.argv)
+  console.log(calculateExercises(hoursPerDay, target))
+} catch (error: unknown) {
+  let errorMessage = 'Something bad happend'
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message
+  }
+  console.log(errorMessage)
+}
