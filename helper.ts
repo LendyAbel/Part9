@@ -21,6 +21,7 @@ export const getBMICategory = (bmi: number): string => {
   if (bmi >= 30.0 && bmi < 35.0) return 'Obese (Class I)'
   if (bmi >= 35.0 && bmi < 40.0) return 'Obese (Class II)'
   if (bmi >= 40.0) return 'Obese (Class III)'
+  return 'Unkown BMI value'
 }
 
 export const parseArgumentsBmi = (args: string[]): BmiValues => {
