@@ -23,7 +23,10 @@ app.post('/exercises', (req, res) => {
   if (!daily_exercises || !target) {
     return res.status(400).json({ error: 'parameters missing' });
   }
-  return res.json(calculateExercises(dailyExercises, Number(target)));
+  if (!Array.isArray(daily_exercises) || isNaN(Number(target))){
+    return res.status(400).json({ error: 'malformatted parameters' });
+  }
+    return res.json(calculateExercises(dailyExercises, Number(target)));
 });
 
 const PORT = 3003;
