@@ -9,7 +9,9 @@ interface Result {
   rating: 1 | 2 | 3;
   ratingDescriptiong: string;
 }
-const calculateExercises = (hoursPerDay: number[], target: number): Result => {
+export type HoursPerDay = number[];
+
+const calculateExercises = (hoursPerDay: HoursPerDay, target: number): Result => {
   const periodLength = hoursPerDay.length;
   const trainingDays = hoursPerDay.filter(day => day > 0).length;
   const average = hoursPerDay.reduce((acc, hour) => acc + hour, 0) / periodLength;
@@ -39,13 +41,17 @@ const calculateExercises = (hoursPerDay: number[], target: number): Result => {
   };
 };
 
-try {
-  const { target, hoursPerDay } = parseArgumentsExercises(process.argv);
-  console.log(calculateExercises(hoursPerDay, target));
-} catch (error: unknown) {
-  let errorMessage = 'Something bad happend';
-  if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message;
+if (require.main === module) {
+  try {
+    const { target, hoursPerDay } = parseArgumentsExercises(process.argv);
+    console.log(calculateExercises(hoursPerDay, target));
+  } catch (error: unknown) {
+    let errorMessage = 'Something bad happend';
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
+
+export default calculateExercises;
