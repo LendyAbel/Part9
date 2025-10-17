@@ -1,19 +1,49 @@
-import { NewPatient } from './types';
+import { Gender, NewPatient } from './types';
+
+const isString = (text: unknown): text is string => {
+  return typeof text === 'string' || text instanceof String;
+};
+
+const isGender = (param: string): param is Gender => {
+  const object = Object.values(Gender)
+    .map(g => g.toString())
+    .includes(param);
+  return object;
+};
+
+const isDate = (date: string): boolean => {
+  return Boolean(Date.parse(date));
+};
 
 const parseName = (name: unknown): string => {
-  return String(name);
+  if (!name || !isString(name)) {
+    throw new Error('Incorrect or missing name');
+  }
+  return name;
 };
 const parseDateOfBirth = (dateOfBirth: unknown): string => {
-  return String(dateOfBirth);
+  if (!dateOfBirth || !isString(dateOfBirth) || !isDate(dateOfBirth)) {
+    throw new Error('Incorrect or missing date of birth');
+  }
+  return dateOfBirth;
 };
 const parseSsn = (ssn: unknown): string => {
-  return String(ssn);
+  if (!ssn || !isString(ssn)) {
+    throw new Error('Incorrect or missing date of birth');
+  }
+  return ssn;
 };
-const parseGender = (gender: unknown): string => {
-  return String(gender);
+const parseGender = (gender: unknown): Gender => {
+  if (!gender || !isString(gender) || !isGender(gender)) {
+    throw new Error('Incorrect or missing gender');
+  }
+  return gender;
 };
 const parseOccupation = (occupation: unknown): string => {
-  return String(occupation);
+  if (!occupation || !isString(occupation)) {
+    throw new Error('Incorrect or missing date of birth');
+  }
+  return occupation;
 };
 
 export const toNewPatientEntry = (object: unknown): NewPatient => {
