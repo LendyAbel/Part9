@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import diaryService from './services/diaryService';
-import Diaries from './components/Diary';
 import Header from './components/Header';
-import type { NonSensitiveDiaryEntry } from './types';
+import Diaries from './components/Diary';
+import NewEntryForm from './components/NewEntryForm';
+import type { NewDiaryEntry, NonSensitiveDiaryEntry } from './types';
 
 function App() {
   const [data, setData] = useState<NonSensitiveDiaryEntry[]>([]);
@@ -13,9 +14,16 @@ function App() {
     });
   }, []);
 
+  const entryCreation = (newEntry: NewDiaryEntry) => {
+    diaryService.createEntry(newEntry).then(newEntry => {
+      setData(data.concat(newEntry));
+    });
+  };
+
   return (
     <>
       <Header />
+      <NewEntryForm entryCreation={entryCreation} />
       <Diaries entries={data} />
     </>
   );
