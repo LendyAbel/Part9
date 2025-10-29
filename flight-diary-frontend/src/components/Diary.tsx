@@ -1,10 +1,19 @@
+import type { NonSensitiveDiaryEntry } from '../types';
 import Entry from './Entry';
 
-const Diary = () => {
+interface DiaryProps {
+  entries: NonSensitiveDiaryEntry[];
+}
+
+const Diary = ({ entries }: DiaryProps) => {
   return (
     <div>
-      Diary:
-      <Entry />
+      <h2>Diary Entries:</h2>
+      {entries.map(entry => (
+        <div key={entry.id}>
+          <Entry entry={entry} />
+        </div>
+      ))}
     </div>
   );
 };

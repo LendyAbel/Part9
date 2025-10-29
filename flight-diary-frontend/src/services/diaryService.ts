@@ -1,9 +1,9 @@
 import axios from 'axios';
-import type { DiaryEntry } from '../types';
-const baseUrl = 'http://localhost:3000/api/diaries';
+import type { NonSensitiveDiaryEntry } from '../types';
+const baseUrl = '/api/diaries';
 
 const getAllEntries = () => {
-    return axios.get<DiaryEntry[]>(baseUrl).then(res => res.data)
+    return axios.get<NonSensitiveDiaryEntry[]>(baseUrl).then(res => res.data);
 }
 
 export default { getAllEntries}

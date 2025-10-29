@@ -3,3 +3,11 @@
   margin: 0;
   padding: 0;
 }
+
+.entry{
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+.entry h3 {
+  margin-bottom: 10px;
+}
