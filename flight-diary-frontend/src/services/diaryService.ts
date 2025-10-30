@@ -2,12 +2,24 @@ import axios from 'axios';
 import type { NewDiaryEntry, DiaryEntry, NonSensitiveDiaryEntry } from '../types';
 const baseUrl = '/api/diaries';
 
-const getAllEntries = () => {
-  return axios.get<NonSensitiveDiaryEntry[]>(baseUrl).then(res => res.data);
+const getAllEntries = async () => {
+  const response = await axios.get<NonSensitiveDiaryEntry[]>(baseUrl);
+  return response.data;
 };
 
-const createEntry = (newEntry: NewDiaryEntry) => {
-  return axios.post<DiaryEntry>(baseUrl, newEntry).then(res => res.data);
+
+const createEntry = async (newEntry: NewDiaryEntry) => {
+  try {
+    const response = await axios.post<DiaryEntry>(baseUrl, newEntry);
+    return response.data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data;
+      throw errorMessage;
+    } else {
+      throw 'Unexpected error';
+    }
+  }
 };
 
 export default { getAllEntries, createEntry };

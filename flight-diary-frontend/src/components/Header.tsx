@@ -1,7 +1,7 @@
 const Header = () => {
   return (
     <div>
-      <strong>FLIGHT DIARY</strong>
+      <h1>FLIGHT DIARY</h1>
     </div>
   );
 };
