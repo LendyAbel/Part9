@@ -29,7 +29,7 @@ const parseDateOfBirth = (dateOfBirth: unknown): string => {
 };
 const parseSsn = (ssn: unknown): string => {
   if (!ssn || !isString(ssn)) {
-    throw new Error('Incorrect or missing date of birth');
+    throw new Error('Incorrect or missing ssn');
   }
   return ssn;
 };
@@ -41,7 +41,7 @@ const parseGender = (gender: unknown): Gender => {
 };
 const parseOccupation = (occupation: unknown): string => {
   if (!occupation || !isString(occupation)) {
-    throw new Error('Incorrect or missing date of birth');
+    throw new Error('Incorrect or missing occupation');
   }
   return occupation;
 };
