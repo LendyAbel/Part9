@@ -1,6 +1,3 @@
-import { z } from 'zod';
-import { NewPatientSchema } from './utils';
-
 export type Diagnosis = {
   code: string;
   name: string;
@@ -13,10 +10,21 @@ export enum Gender {
   Other = 'other',
 }
 
-export type NewPatient = z.infer<typeof NewPatientSchema>;
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface Entry {}
 
-export interface Patient extends NewPatient {
+export interface Patient {
   id: string;
+  name: string;
+  dateOfBirth: string;
+  ssn: string;
+  gender: Gender;
+  occupation: string;
+  entries: Entry[];
 }
 
 export type PatientNoSsn = Omit<Patient, 'ssn'>;
+
+export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;
+
+export type NewPatient = Omit<Patient, 'id'>;
