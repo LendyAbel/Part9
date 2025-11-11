@@ -9,9 +9,15 @@ router.get('/', (_req, res: Response<Patient[]>) => {
   res.send(patientsServices.getPatientes());
 });
 
-router.get('/:id', (req, res: Response<Patient>) => {
+router.get('/:id', (req, res) => {
   const id = req.params.id;
-  res.send(patientsServices.getPatientById(id));
+  const patient = patientsServices.getPatientById(id);
+
+  if (!patient) {
+    return res.status(404).send({ error: 'Patient not found' });
+  }
+
+  return res.send(patient);
 });
 
 router.post('/', (req, res) => {
