@@ -9,7 +9,7 @@ const IndividualPatientPage = ({ patient }: Props) => {
   if (!patient) {
     return <div>Pattient not found</div>;
   }
-  const { name, gender, ssn, occupation } = patient;
+  const { name, gender, ssn, occupation, entries } = patient;
 
   const genderIcon = (gender: Gender) => {
     switch (gender) {
@@ -18,6 +18,7 @@ const IndividualPatientPage = ({ patient }: Props) => {
         break;
       case Gender.Male:
         return <Male />;
+        break;
       default:
         return <Transgender />;
         break;
@@ -32,6 +33,22 @@ const IndividualPatientPage = ({ patient }: Props) => {
       </h3>
       <p>ssn: {ssn ? ssn : ''}</p>
       <p>occupation: {occupation}</p>
+      <div>
+        {entries.map(({ date, description, diagnosisCodes, id }) => {
+          return (
+            <div key={id}>
+              <p>
+                {date} <i>{description}</i>
+              </p>
+              <ul>
+                {diagnosisCodes?.map(code => (
+                  <li key={code}>{code}</li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
