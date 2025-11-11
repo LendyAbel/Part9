@@ -1,5 +1,5 @@
 import { Rating } from '@mui/material';
-import { Favorite } from '@mui/icons-material';
+import { Favorite, FavoriteBorder } from '@mui/icons-material';
 
 import { styled } from '@mui/material/styles';
 
@@ -32,6 +32,7 @@ const HealthRatingBar = ({ rating, showText }: BarProps) => {
         value={4 - rating}
         max={4}
         icon={<Favorite fontSize="inherit" />}
+        emptyIcon={<FavoriteBorder fontSize='inherit'/>}
       />
 
       {showText ? <p>{HEALTHBAR_TEXTS[rating]}</p> : null}
