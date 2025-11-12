@@ -1,5 +1,6 @@
 import { Female, Male, Transgender } from '@mui/icons-material';
 import { Diagnosis, Gender, Patient } from '../../types';
+import EntryDetails from './EntryDetails';
 
 interface Props {
   patient: Patient | null | undefined;
@@ -35,24 +36,10 @@ const IndividualPatientPage = ({ patient, diagnoses }: Props) => {
       <p>ssn: {ssn ? ssn : ''}</p>
       <p>occupation: {occupation}</p>
       <div>
-        {entries.map(({ date, description, diagnosisCodes, id }) => {
+        {entries.map(entry => {
           return (
-            <div key={id}>
-              <p>
-                {date} <i>{description}</i>
-              </p>
-              <ul>
-                {diagnosisCodes?.map(code => (
-                  <li key={code}>
-                    {code}{' '}
-                    {
-                      diagnoses.find(d => {
-                        return d.code === code;
-                      })?.name
-                    }
-                  </li>
-                ))}
-              </ul>
+            <div key={entry.id}>
+              <EntryDetails entry={entry} diagnoses={diagnoses} />
             </div>
           );
         })}
