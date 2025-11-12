@@ -55,6 +55,10 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.entryContainer {
+  border: 1px dashed blue;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -66,4 +70,8 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.entryContainer {
+  border: 1px dashed blue;
 }
