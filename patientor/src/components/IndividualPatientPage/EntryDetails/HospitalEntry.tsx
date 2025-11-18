@@ -1,3 +1,4 @@
+import { LocalHospital } from '@mui/icons-material';
 import type { HospitalEntry } from '../../../types';
 
 interface HospitalEntryProps {
@@ -7,7 +8,10 @@ interface HospitalEntryProps {
 const HospitalEntry = ({ entry }: HospitalEntryProps) => {
   return (
     <div>
-      <p>{entry.date}</p>
+      <p>
+        {entry.date}
+        <LocalHospital />
+      </p>
       <i>{entry.description}</i>
       <p>Discharge: {entry.discharge.date} </p>
       <i>{entry.discharge.criteria}</i>

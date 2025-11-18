@@ -1,4 +1,4 @@
-import { Diagnosis, Discharge, Entry, Gender, HealthCheckRating, NewEntry, NewPatient } from './types';
+import { Diagnosis, Discharge, Entry, Gender, HealthCheckRating, NewEntry, NewPatient, SickLeave } from './types';
 
 const assertNever = (value: never): never => {
   throw new Error(`Unhandled discriminated union member: ${JSON.stringify(value)}`);
@@ -139,6 +139,25 @@ const parseDischarge = (discharge: unknown): Discharge => {
   };
 };
 
+const parseSickLeave = (sickLeave: unknown): SickLeave => {
+  if (!sickLeave || typeof sickLeave !== 'object') {
+    throw new Error('Invalid sick leave: must be an object');
+  }
+  if (!('startDate' in sickLeave) || !('endDate' in sickLeave)) {
+    throw new Error('Missing sick leave data: startDate or endDate');
+  }
+  if (!isString(sickLeave.startDate) || !isString(sickLeave.endDate)) {
+    throw new Error('Invalid sick leave date: must be a string');
+  }
+  if (!isDate(sickLeave.startDate) || !isDate(sickLeave.endDate)) {
+    throw new Error('Invalid sick leave date: must be a date string');
+  }
+  if (new Date(sickLeave.startDate) > new Date(sickLeave.endDate)) {
+    throw new Error('Sick leave start date must be before end date');
+  }
+  return sickLeave as SickLeave;
+};
+
 // Converters
 // ===================
 
@@ -199,14 +218,17 @@ export const toNewEntry = (object: unknown): NewEntry => {
           break;
         case 'OccupationalHealthcare':
           if ('employerName' in object) {
+            const sickLeave = 'sickLeave' in object ? parseSickLeave(object.sickLeave) : undefined;
             const newEntry: NewEntry = {
               type: 'OccupationalHealthcare',
               date,
               specialist,
               description,
               employerName: parseName(object.employerName),
+              ...(sickLeave && { sickLeave }),
               ...(diagnosisCodes && { diagnosisCodes }),
             };
+
             return newEntry;
           }
           throw new Error('Incorrect data for OccupationalHealthcare entry: some fields are missing');

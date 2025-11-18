@@ -57,6 +57,7 @@ const IndividualPatientPage = ({ patient, diagnoses, setPatients }: Props) => {
 
   const addEntry = async (value: NewEntry) => {
     const entry = await patientService.newEntry(patient.id, value);
+    console.log('New entry added:', entry);
     const patientUpdated = { ...patient, entries: patient.entries.concat(entry) };
     setPatients(prevState => prevState.map(p => (p.id === patientUpdated.id ? patientUpdated : p)));
     closeModal();
