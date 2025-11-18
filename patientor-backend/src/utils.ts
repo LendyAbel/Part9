@@ -45,6 +45,13 @@ const parseName = (name: unknown): string => {
   return name;
 };
 
+const parseDate = (dateOfBirth: unknown): string => {
+  if (!dateOfBirth || !isString(dateOfBirth) || !isDate(dateOfBirth)) {
+    throw new Error('Incorrect or missing date: must be yyyy-mm-dd');
+  }
+  return dateOfBirth;
+};
+
 const parseDateOfBirth = (dateOfBirth: unknown): string => {
   if (!dateOfBirth || !isString(dateOfBirth) || !isDate(dateOfBirth)) {
     throw new Error('Incorrect or missing date of birth');
@@ -107,8 +114,8 @@ const parseDiagnosisCodes = (codes: unknown): Array<Diagnosis['code']> => {
 };
 
 const parseHealthCheckingRating = (rating: unknown): HealthCheckRating => {
-  if (!rating || !isNumber(rating) || !isHealthCheckRating(rating)) {
-    throw new Error('Invalid or missing health check rating');
+  if (rating === null || rating === undefined || !isNumber(rating) || !isHealthCheckRating(rating)) {
+    throw new Error('Invalid or missing health check rating ' + rating);
   }
   return rating;
 };
@@ -171,7 +178,7 @@ export const toNewEntry = (object: unknown): NewEntry => {
       throw new Error(`Invalid or missing entry type: ${object.type}`);
     }
     if ('date' in object && 'specialist' in object && 'description' in object) {
-      const date = parseName(object.date);
+      const date = parseDate(object.date);
       const specialist = parseName(object.specialist);
       const description = parseName(object.description);
       const diagnosisCodes = 'diagnosisCodes' in object ? parseDiagnosisCodes(object.diagnosisCodes) : undefined;
