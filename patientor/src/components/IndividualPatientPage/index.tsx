@@ -53,7 +53,10 @@ const IndividualPatientPage = ({ patient, diagnoses, setPatients }: Props) => {
   };
 
   const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+  const closeModal = () => {
+    setModalOpen(false);
+    setError('');
+  };
 
   const addEntry = async (value: NewEntry) => {
     const entry = await patientService.newEntry(patient.id, value);
@@ -85,7 +88,7 @@ const IndividualPatientPage = ({ patient, diagnoses, setPatients }: Props) => {
       <Button variant='contained' onClick={() => openModal()}>
         Add New Entry
       </Button>
-      <AddEntryModal modalOpen={modalOpen} onClose={() => closeModal()} onSubmit={submitNewEntry} error={error} />
+      <AddEntryModal modalOpen={modalOpen} onClose={() => closeModal()} onSubmit={submitNewEntry} error={error} diagnoses={diagnoses} />
       <h3>Entries:</h3>
       <div>
         {entries.map(entry => {
