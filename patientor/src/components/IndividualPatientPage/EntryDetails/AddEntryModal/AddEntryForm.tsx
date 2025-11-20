@@ -1,13 +1,26 @@
-import { Button, FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, TextField } from '@mui/material';
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  Stack,
+  TextField,
+} from '@mui/material';
 import type { Diagnosis, NewEntry } from '../../../../types';
 import { SyntheticEvent, useState } from 'react';
+import DatePickerInput from './DatePickerInput';
+import DiagnosisCodeInput from './DiagnosisCodeInput';
 
 interface EntryFormProps {
   onCancel: () => void;
   onSubmit: (value: NewEntry) => void;
+  diagnoses: Diagnosis[];
 }
 
-const AddEntryForm = ({ onCancel, onSubmit }: EntryFormProps) => {
+const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: EntryFormProps) => {
   const [entryData, setEntryData] = useState<NewEntry>({
     description: '',
     date: '',
@@ -66,18 +79,20 @@ const AddEntryForm = ({ onCancel, onSubmit }: EntryFormProps) => {
     setEntryData({ ...entryData, healthCheckRating: value } as NewEntry);
   };
 
+  const handleDiagnosisCodesChange = (codes: Array<Diagnosis['code']>) => {
+    setEntryData({ ...entryData, diagnosisCodes: codes } as NewEntry);
+  };
+
   const HospitalForm = () => {
+    
     if (entryData.type === 'Hospital') {
       return (
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', margin: '5px' }}>
           <FormLabel>Discharge</FormLabel>
-          <TextField
+          <DatePickerInput
             label='Date'
-            fullWidth
             value={entryData.discharge.date}
-            onChange={({ target }) =>
-              setEntryData({ ...entryData, discharge: { ...entryData.discharge, date: target.value } } as NewEntry)
-            }
+            onChange={date => setEntryData({ ...entryData, discharge: { ...entryData.discharge, date } })}
           />
           <TextField
             label='Criteria'
@@ -94,7 +109,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: EntryFormProps) => {
   const OccupationalForm = () => {
     if (entryData.type === 'OccupationalHealthcare') {
       return (
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', margin: '5px' }}>
           <TextField
             label='Employer Name'
             fullWidth
@@ -102,28 +117,22 @@ const AddEntryForm = ({ onCancel, onSubmit }: EntryFormProps) => {
             onChange={({ target }) => setEntryData({ ...entryData, employerName: target.value } as NewEntry)}
           />
           <FormLabel>Sick Leave</FormLabel>
-          <TextField
-            label='Start Date'
-            fullWidth
-            value={entryData.sickLeave?.startDate || ''}
-            onChange={({ target }) =>
-              setEntryData({
-                ...entryData,
-                sickLeave: { ...entryData.sickLeave, startDate: target.value },
-              } as NewEntry)
-            }
-          />
-          <TextField
-            label='End Date'
-            fullWidth
-            value={entryData.sickLeave?.endDate || ''}
-            onChange={({ target }) =>
-              setEntryData({
-                ...entryData,
-                sickLeave: { ...entryData.sickLeave, endDate: target.value },
-              } as NewEntry)
-            }
-          />
+          <Stack direction='row' spacing={2}>
+            <DatePickerInput
+              label='Start Date'
+              value={entryData.sickLeave?.startDate || ''}
+              onChange={date =>
+                setEntryData({ ...entryData, sickLeave: { ...entryData.sickLeave, startDate: date } } as NewEntry)
+              }
+            />
+            <DatePickerInput
+              label='End Date'
+              value={entryData.sickLeave?.endDate || ''}
+              onChange={date =>
+                setEntryData({ ...entryData, sickLeave: { ...entryData.sickLeave, endDate: date } } as NewEntry)
+              }
+            />
+          </Stack>
         </div>
       );
     }
@@ -131,7 +140,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: EntryFormProps) => {
   const HealthCheckFrom = () => {
     if (entryData.type === 'HealthCheck') {
       return (
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', margin: '5px' }}>
           <TextField
             label='Health Check Rating'
             fullWidth
@@ -166,11 +175,10 @@ const AddEntryForm = ({ onCancel, onSubmit }: EntryFormProps) => {
             value={entryData.description}
             onChange={({ target }) => setEntryData({ ...entryData, description: target.value })}
           />
-          <TextField
+          <DatePickerInput
             label='Date'
-            fullWidth
             value={entryData.date}
-            onChange={({ target }) => setEntryData({ ...entryData, date: target.value })}
+            onChange={date => setEntryData({ ...entryData, date })}
           />
           <TextField
             label='Specialist'
@@ -178,14 +186,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: EntryFormProps) => {
             value={entryData.specialist}
             onChange={({ target }) => setEntryData({ ...entryData, specialist: target.value })}
           />
-          <TextField
-            label='Diagnosis Codes'
-            fullWidth
-            value={entryData.diagnosisCodes?.join(', ')}
-            onChange={({ target }) =>
-              setEntryData({ ...entryData, diagnosisCodes: target.value.split(',').map(code => code.trim()) })
-            }
-          />
+          <DiagnosisCodeInput label='Diagnosis Codes' diagnoses={diagnoses} onChange={handleDiagnosisCodesChange} />
           <RadioGroup value={entryData.type} onChange={handleTypeChange}>
             <div>
               <FormControlLabel value={'Hospital'} control={<Radio />} label='Hospital' />
@@ -193,14 +194,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: EntryFormProps) => {
               <FormControlLabel value={'HealthCheck'} control={<Radio />} label='Health Check' />
             </div>
           </RadioGroup>
-          {/* {entryData.type === 'HealthCheck' && (
-            <TextField
-              label='Health Check Rating'
-              fullWidth
-              value={entryData.healthCheckRating}
-              onChange={handleHealthCheckRatingChange}
-            />
-          )} */}
+
           {typeForm()}
         </FormControl>
 
